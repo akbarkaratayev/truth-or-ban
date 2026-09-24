@@ -24,6 +24,8 @@ async def main() -> None:
         default=DefaultBotProperties(parse_mode=ParseMode.HTML),
     )
     dp = Dispatcher()
+    dp["db"] = db
+    dp["config"] = config
 
     dp.message.outer_middleware(MemberTrackingMiddleware(db))
     dp.include_router(commands.router)

@@ -1,8 +1,17 @@
-from aiogram import Router
+from aiogram import Bot, Router
+from aiogram.enums import ChatMemberStatus
 from aiogram.filters import Command
 from aiogram.types import Message
 
+from bot.asking import ask_question
+from bot.config import Config
+from bot.database import Database
+from bot.questions import load_questions
+
 router = Router(name="commands")
+
+ADMIN_STATUSES = {ChatMemberStatus.CREATOR, ChatMemberStatus.ADMINISTRATOR}
+GROUP_TYPES = {"group", "supergroup"}
 
 HELP_TEXT = (
     "Hi! I'm the Truth-or-... bot 👋\n\n"
@@ -22,3 +31,29 @@ HELP_TEXT = (
 @router.message(Command("help"))
 async def cmd_help(message: Message) -> None:
     await message.reply(HELP_TEXT)
+
+
+@router.message(Command("ask"))
+async def cmd_ask(message: Message, bot: Bot, db: Database, config: Config) -> None:
+    if message.chat.type not in GROUP_TYPES:
+        await message.reply("This command only works inside a group.")
+        return
+
+    member = await bot.get_chat_member(message.chat.id, message.from_user.id)
+    if member.status not in ADMIN_STATUSES:
+        await message.reply("Only group admins can use /ask.")
+        return
+
+    questions = load_questions(config.questions_file)
+    result = await ask_question(bot, db, message.chat.id, questions)
+
+    if result == "no_members":
+        await message.reply(
+            "I don't know any group members yet — I learn about people as "
+            "they send messages, so ask someone to say something first."
+        )
+    elif result == "no_questions":
+        await message.reply(
+            "I've already asked everyone I know every question I have — "
+            "add more to questions.txt."
+        )

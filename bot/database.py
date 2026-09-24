@@ -13,6 +13,18 @@ CREATE TABLE IF NOT EXISTS members (
     updated_at TEXT NOT NULL,
     PRIMARY KEY (user_id, chat_id)
 );
+
+CREATE TABLE IF NOT EXISTS questions_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    chat_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    user_name TEXT NOT NULL,
+    question TEXT NOT NULL,
+    message_id INTEGER,
+    date_asked TEXT NOT NULL,
+    date_answered TEXT,
+    answer TEXT
+);
 """
 
 
@@ -75,3 +87,41 @@ class Database:
             )
             rows = await cursor.fetchall()
             return [dict(row) for row in rows]
+
+    async def log_question(
+        self,
+        chat_id: int,
+        user_id: int,
+        user_name: str,
+        question: str,
+        message_id: int | None,
+    ) -> int:
+        now = datetime.now(timezone.utc).isoformat()
+        async with aiosqlite.connect(self._path) as db:
+            cursor = await db.execute(
+                """
+                INSERT INTO questions_log (chat_id, user_id, user_name, question, message_id, date_asked)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (chat_id, user_id, user_name, question, message_id, now),
+            )
+            await db.commit()
+            return cursor.lastrowid
+
+    async def get_asked_questions(self, chat_id: int, user_id: int) -> set[str]:
+        async with aiosqlite.connect(self._path) as db:
+            cursor = await db.execute(
+                "SELECT question FROM questions_log WHERE chat_id = ? AND user_id = ?",
+                (chat_id, user_id),
+            )
+            rows = await cursor.fetchall()
+            return {row[0] for row in rows}
+
+    async def get_last_asked_user(self, chat_id: int) -> int | None:
+        async with aiosqlite.connect(self._path) as db:
+            cursor = await db.execute(
+                "SELECT user_id FROM questions_log WHERE chat_id = ? ORDER BY id DESC LIMIT 1",
+                (chat_id,),
+            )
+            row = await cursor.fetchone()
+            return row[0] if row else None
