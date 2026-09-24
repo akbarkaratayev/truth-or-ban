@@ -125,3 +125,12 @@ class Database:
             )
             row = await cursor.fetchone()
             return row[0] if row else None
+
+    async def get_ask_counts(self, chat_id: int) -> dict[int, int]:
+        async with aiosqlite.connect(self._path) as db:
+            cursor = await db.execute(
+                "SELECT user_id, COUNT(*) FROM questions_log WHERE chat_id = ? GROUP BY user_id",
+                (chat_id,),
+            )
+            rows = await cursor.fetchall()
+            return {row[0]: row[1] for row in rows}

@@ -7,15 +7,23 @@ from bot.utils import display_name, mention_html
 
 
 async def choose_target(db: Database, chat_id: int, members: list[dict]) -> dict | None:
+    """Round-robin: prefers whoever has been asked the fewest times, so
+    everyone gets a turn before anyone repeats. Ties are broken randomly,
+    with a same-person-twice-in-a-row tiebreak when other members exist.
+    """
     if not members:
         return None
 
-    last_user_id = await db.get_last_asked_user(chat_id)
-    candidates = members
-    if last_user_id is not None and len(members) > 1:
-        others = [m for m in members if m["user_id"] != last_user_id]
-        if others:
-            candidates = others
+    counts = await db.get_ask_counts(chat_id)
+    min_count = min(counts.get(m["user_id"], 0) for m in members)
+    candidates = [m for m in members if counts.get(m["user_id"], 0) == min_count]
+
+    if len(candidates) > 1:
+        last_user_id = await db.get_last_asked_user(chat_id)
+        if last_user_id is not None:
+            others = [m for m in candidates if m["user_id"] != last_user_id]
+            if others:
+                candidates = others
 
     return random.choice(candidates)
 
