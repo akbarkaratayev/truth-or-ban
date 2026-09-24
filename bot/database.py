@@ -134,3 +134,28 @@ class Database:
             )
             rows = await cursor.fetchall()
             return {row[0]: row[1] for row in rows}
+
+    async def get_question_by_message_id(
+        self, chat_id: int, message_id: int
+    ) -> dict | None:
+        async with aiosqlite.connect(self._path) as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                """
+                SELECT id, user_id, user_name, question, date_answered
+                FROM questions_log
+                WHERE chat_id = ? AND message_id = ?
+                """,
+                (chat_id, message_id),
+            )
+            row = await cursor.fetchone()
+            return dict(row) if row else None
+
+    async def save_answer(self, log_id: int, answer: str) -> None:
+        now = datetime.now(timezone.utc).isoformat()
+        async with aiosqlite.connect(self._path) as db:
+            await db.execute(
+                "UPDATE questions_log SET answer = ?, date_answered = ? WHERE id = ?",
+                (answer, now, log_id),
+            )
+            await db.commit()

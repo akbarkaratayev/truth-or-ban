@@ -7,7 +7,7 @@ from aiogram.enums import ParseMode
 
 from bot.config import load_config
 from bot.database import Database
-from bot.handlers import commands
+from bot.handlers import commands, replies
 from bot.middlewares import MemberTrackingMiddleware
 
 
@@ -29,6 +29,7 @@ async def main() -> None:
 
     dp.message.outer_middleware(MemberTrackingMiddleware(db))
     dp.include_router(commands.router)
+    dp.include_router(replies.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
