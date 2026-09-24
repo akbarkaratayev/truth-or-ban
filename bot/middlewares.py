@@ -25,6 +25,8 @@ class MemberTrackingMiddleware(BaseMiddleware):
         data: dict[str, Any],
     ) -> Any:
         if event.chat.type in GROUP_TYPES:
+            await self.db.mark_chat_active(event.chat.id)
+
             if event.new_chat_members:
                 for user in event.new_chat_members:
                     if not user.is_bot:

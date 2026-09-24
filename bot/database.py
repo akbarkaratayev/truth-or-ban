@@ -14,6 +14,12 @@ CREATE TABLE IF NOT EXISTS members (
     PRIMARY KEY (user_id, chat_id)
 );
 
+CREATE TABLE IF NOT EXISTS chats (
+    chat_id INTEGER PRIMARY KEY,
+    is_active INTEGER NOT NULL DEFAULT 1,
+    updated_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS questions_log (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     chat_id INTEGER NOT NULL,
@@ -159,3 +165,44 @@ class Database:
                 (answer, now, log_id),
             )
             await db.commit()
+
+    async def get_last_question_time(self, chat_id: int) -> datetime | None:
+        async with aiosqlite.connect(self._path) as db:
+            cursor = await db.execute(
+                "SELECT date_asked FROM questions_log WHERE chat_id = ? ORDER BY id DESC LIMIT 1",
+                (chat_id,),
+            )
+            row = await cursor.fetchone()
+            return datetime.fromisoformat(row[0]) if row else None
+
+    async def mark_chat_active(self, chat_id: int) -> None:
+        now = datetime.now(timezone.utc).isoformat()
+        async with aiosqlite.connect(self._path) as db:
+            await db.execute(
+                """
+                INSERT INTO chats (chat_id, is_active, updated_at)
+                VALUES (?, 1, ?)
+                ON CONFLICT (chat_id) DO UPDATE SET is_active = 1, updated_at = excluded.updated_at
+                """,
+                (chat_id, now),
+            )
+            await db.commit()
+
+    async def mark_chat_inactive(self, chat_id: int) -> None:
+        now = datetime.now(timezone.utc).isoformat()
+        async with aiosqlite.connect(self._path) as db:
+            await db.execute(
+                """
+                INSERT INTO chats (chat_id, is_active, updated_at)
+                VALUES (?, 0, ?)
+                ON CONFLICT (chat_id) DO UPDATE SET is_active = 0, updated_at = excluded.updated_at
+                """,
+                (chat_id, now),
+            )
+            await db.commit()
+
+    async def get_active_chats(self) -> list[int]:
+        async with aiosqlite.connect(self._path) as db:
+            cursor = await db.execute("SELECT chat_id FROM chats WHERE is_active = 1")
+            rows = await cursor.fetchall()
+            return [row[0] for row in rows]
