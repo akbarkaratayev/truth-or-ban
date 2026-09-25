@@ -62,7 +62,7 @@ async def cmd_ask(message: Message, bot: Bot, db: Database, config: Config) -> N
 
 
 @router.message(Command("myanswers"))
-async def cmd_myanswers(message: Message, bot: Bot, db: Database) -> None:
+async def cmd_myanswers(message: Message, bot: Bot, db: Database, bot_username: str) -> None:
     user = message.from_user
     if user is None:
         return
@@ -76,5 +76,7 @@ async def cmd_myanswers(message: Message, bot: Bot, db: Database) -> None:
         if message.chat.id != user.id:
             await message.reply("I've sent your answers in a private message 📬")
     except TelegramForbiddenError:
-        for chunk in chunks:
-            await message.reply(chunk)
+        await message.reply(
+            "I can't message you privately yet — start a chat with me first: "
+            f"https://t.me/{bot_username}, then run /myanswers again."
+        )

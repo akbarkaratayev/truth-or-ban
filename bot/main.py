@@ -24,9 +24,12 @@ async def main() -> None:
         token=config.bot_token,
         default=DefaultBotProperties(parse_mode=ParseMode.HTML),
     )
+    me = await bot.get_me()
+
     dp = Dispatcher()
     dp["db"] = db
     dp["config"] = config
+    dp["bot_username"] = me.username
 
     dp.message.outer_middleware(MemberTrackingMiddleware(db))
     dp.include_router(chats.router)
