@@ -1,11 +1,13 @@
 from aiogram import Bot, Router
 from aiogram.enums import ChatMemberStatus
+from aiogram.exceptions import TelegramForbiddenError
 from aiogram.filters import Command
 from aiogram.types import Message
 
 from bot.asking import ask_question
 from bot.config import Config
 from bot.database import Database
+from bot.history import format_history
 from bot.questions import load_questions
 
 router = Router(name="commands")
@@ -57,3 +59,22 @@ async def cmd_ask(message: Message, bot: Bot, db: Database, config: Config) -> N
             "I've already asked everyone I know every question I have — "
             "add more to questions.txt."
         )
+
+
+@router.message(Command("myanswers"))
+async def cmd_myanswers(message: Message, bot: Bot, db: Database) -> None:
+    user = message.from_user
+    if user is None:
+        return
+
+    entries = await db.get_user_history(user.id)
+    chunks = format_history(entries) or ["You don't have any saved answers yet."]
+
+    try:
+        for chunk in chunks:
+            await bot.send_message(user.id, chunk)
+        if message.chat.id != user.id:
+            await message.reply("I've sent your answers in a private message 📬")
+    except TelegramForbiddenError:
+        for chunk in chunks:
+            await message.reply(chunk)

@@ -201,6 +201,21 @@ class Database:
             )
             await db.commit()
 
+    async def get_user_history(self, user_id: int) -> list[dict]:
+        async with aiosqlite.connect(self._path) as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                """
+                SELECT chat_id, question, answer, date_asked, date_answered
+                FROM questions_log
+                WHERE user_id = ?
+                ORDER BY id ASC
+                """,
+                (user_id,),
+            )
+            rows = await cursor.fetchall()
+            return [dict(row) for row in rows]
+
     async def get_active_chats(self) -> list[int]:
         async with aiosqlite.connect(self._path) as db:
             cursor = await db.execute("SELECT chat_id FROM chats WHERE is_active = 1")
