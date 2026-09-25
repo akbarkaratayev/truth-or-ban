@@ -202,13 +202,18 @@ class Database:
             await db.commit()
 
     async def get_user_history(self, user_id: int) -> list[dict]:
+        """Only answered questions — an unanswered one isn't part of the
+        user's history yet, and there's no bound on how many questions
+        could accumulate over time, so filtering happens in SQL rather
+        than fetching everything and discarding client-side.
+        """
         async with aiosqlite.connect(self._path) as db:
             db.row_factory = aiosqlite.Row
             cursor = await db.execute(
                 """
                 SELECT chat_id, question, answer, date_asked, date_answered
                 FROM questions_log
-                WHERE user_id = ?
+                WHERE user_id = ? AND answer IS NOT NULL
                 ORDER BY id ASC
                 """,
                 (user_id,),

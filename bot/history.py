@@ -4,7 +4,7 @@ CHUNK_CHAR_LIMIT = 3500
 
 
 def format_history(entries: list[dict]) -> list[str]:
-    """Formats Q&A history entries into one or more messages, respecting
+    """Formats answered Q&A entries into one or more messages, respecting
     Telegram's message length limit. Returns an empty list if there are no
     entries, letting the caller decide the "nothing here" wording.
     """
@@ -17,10 +17,7 @@ def format_history(entries: list[dict]) -> list[str]:
         lines.append(
             f"{i}. <b>Q:</b> {html.escape(entry['question'])} <i>({date_asked})</i>"
         )
-        if entry["answer"]:
-            lines.append(f"   <b>A:</b> {html.escape(entry['answer'])}")
-        else:
-            lines.append("   <i>Not answered yet.</i>")
+        lines.append(f"   <b><i>{html.escape(entry['answer'])}</i></b>")
         lines.append("")
 
     return _chunk_lines(lines)
