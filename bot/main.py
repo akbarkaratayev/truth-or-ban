@@ -11,11 +11,19 @@ from bot.handlers import chats, commands, replies
 from bot.middlewares import MemberTrackingMiddleware
 from bot.scheduler import run_scheduler
 
+logger = logging.getLogger(__name__)
+
 
 async def main() -> None:
     logging.basicConfig(level=logging.INFO)
 
     config = load_config()
+    logger.info(
+        "Loaded config: question_interval_hours=%s database_path=%s questions_file=%s",
+        config.question_interval_hours,
+        config.database_path,
+        config.questions_file,
+    )
 
     db = Database(config.database_path)
     await db.init()
