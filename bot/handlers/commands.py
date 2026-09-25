@@ -1,8 +1,8 @@
-from aiogram import Bot, Router
+from aiogram import Bot, F, Router
 from aiogram.enums import ChatMemberStatus
 from aiogram.exceptions import TelegramForbiddenError
 from aiogram.filters import Command
-from aiogram.types import Message
+from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from bot.asking import ask_question
 from bot.config import Config
@@ -137,3 +137,49 @@ async def cmd_answers(message: Message, bot: Bot, db: Database, bot_username: st
             "I can't message you privately yet — start a chat with me first: "
             f"https://t.me/{bot_username}, then run /answers again."
         )
+
+
+@router.message(Command("deletemyanswers"))
+async def cmd_deletemyanswers(message: Message) -> None:
+    user = message.from_user
+    if user is None:
+        return
+
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="Yes, delete them", callback_data=f"delanswers:yes:{user.id}"
+                ),
+                InlineKeyboardButton(
+                    text="Not yet", callback_data=f"delanswers:no:{user.id}"
+                ),
+            ]
+        ]
+    )
+    await message.reply(
+        "Are you sure you want to delete all of your saved answers? "
+        "This can't be undone.",
+        reply_markup=keyboard,
+    )
+
+
+@router.callback_query(F.data.startswith("delanswers:"))
+async def on_delete_confirmation(callback: CallbackQuery, db: Database) -> None:
+    _, action, owner_id = callback.data.split(":")
+    if str(callback.from_user.id) != owner_id:
+        await callback.answer("This confirmation isn't for you.", show_alert=True)
+        return
+
+    if action == "yes":
+        deleted = await db.delete_user_history(int(owner_id))
+        text = (
+            f"Deleted {deleted} saved answer(s). 🗑️"
+            if deleted
+            else "You didn't have any saved answers."
+        )
+    else:
+        text = "Okay, your answers are safe — nothing was deleted."
+
+    await callback.message.edit_text(text, reply_markup=None)
+    await callback.answer()

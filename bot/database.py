@@ -235,6 +235,14 @@ class Database:
             rows = await cursor.fetchall()
             return [dict(row) for row in rows]
 
+    async def delete_user_history(self, user_id: int) -> int:
+        async with aiosqlite.connect(self._path) as db:
+            cursor = await db.execute(
+                "DELETE FROM questions_log WHERE user_id = ?", (user_id,)
+            )
+            await db.commit()
+            return cursor.rowcount
+
     async def get_active_chats(self) -> list[int]:
         async with aiosqlite.connect(self._path) as db:
             cursor = await db.execute("SELECT chat_id FROM chats WHERE is_active = 1")
