@@ -11,7 +11,7 @@ from bot.questions import load_questions
 
 logger = logging.getLogger(__name__)
 
-CHECK_INTERVAL_SECONDS = 300
+CHECK_INTERVAL_SECONDS = 180
 
 
 async def run_scheduler(
