@@ -25,7 +25,6 @@ If you could have any superpower, what would you choose?
 What's something you learned recently that surprised you?
 Tea or coffee, and how do you take it?
 What did you want to be when you were a child?
-What's a TV series you'd recommend to everyone here?
 If you could instantly speak one new language fluently, which would it be?
 What's your favorite season and why?
 What's the best cheap purchase you've ever made?
@@ -52,7 +51,6 @@ What's a talent you have that people might not expect?
 What's the last thing that made you laugh out loud?
 Would you rather have a pause button or a rewind button for your life?
 What's your favorite city you've been to?
-What's a place in your city you think everyone should visit?
 If you had to eat one meal every day for a month, what would it be?
 What's the best book you've read in the last year?
 What's a trend you just don't understand?
@@ -62,7 +60,6 @@ What's something you're looking forward to this month?
 What's the most useful thing you learned in school?
 What's your favorite smell?
 If you could ask an expert any question, what would you ask?
-What's a skill you think everyone should learn?
 Cats, dogs, or neither?
 What was your favorite cartoon as a kid?
 What would your dream house have that normal houses don't?
@@ -82,25 +79,20 @@ If you had a robot assistant, what would you make it do first?
 What's a snack you can't resist?
 What's one invention you couldn't live without?
 If you could learn from any teacher in the world, who would it be?
-What's a fun fact you know that most people don't?
 What was your favorite game to play as a child?
-If you could redesign your city, what's the first thing you'd change?
 What's the longest trip you've ever taken?
 What's the best concert or live event you've ever been to?
 If you had your own TV show, what would it be about?
-What's a hidden gem restaurant or café you'd recommend?
 If you could only keep three apps on your phone, which would they be?
 What kind of music do you like to study or work to?
 What's the strangest dream you can remember?
 If you could have any animal as a pet, what would it be?
-What's a tradition from your country you'd like foreigners to know about?
 Would you rather read the book or watch the movie?
 What's the best meal you've ever had at a restaurant?
 If you could talk to your future self for five minutes, what would you ask?
 What's a word in another language that you really like?
 What's a small act of kindness you've seen recently?
 What's your favorite thing about the place you live?
-If you could make one rule everyone in the world had to follow, what would it be?
 What's a job you would never want to do?
 What's something you collect or used to collect?
 If you wrote a book, what would it be about?
@@ -108,3 +100,82 @@ What's the last thing you learned how to do from a video?
 What's your favorite dessert?
 What's the most memorable birthday you've had?
 What's a question you wish people asked you more often?
+What's the earliest memory you can recall?
+What's a fear you've overcome?
+What's something you used to believe as a kid that turned out to be wrong?
+What's the best decision you've ever made?
+What's something you wish you'd started doing sooner?
+What's a compliment you gave someone recently?
+What's the most spontaneous thing you've ever done?
+What's something you're currently saving up for?
+What's a memory that always makes you smile?
+What's a risk you took that paid off?
+What's something you're better at now than five years ago?
+What's a promise you made to yourself this year?
+What's the kindest thing someone has ever done for you?
+What's something you do differently than most people?
+What's a moment you felt truly proud of yourself?
+What's something you're currently curious about?
+What's a childhood dream you still think about?
+What's the hardest thing you've ever had to do?
+What's something that always cheers you up when you're down?
+What's a lesson a failure taught you?
+What's something you've never told anyone but wouldn't mind sharing now?
+What's a moment that changed your perspective on life?
+What's something you're grateful for today?
+What's a nickname you've had, and how did you get it?
+What's something you do to unwind that most people wouldn't expect?
+What's a memory from school that still makes you laugh?
+What's something you're working on improving about yourself?
+What's a moment you felt completely at peace?
+What's the most memorable trip you've taken and why?
+What's a skill you're secretly proud of?
+What's something you used to be afraid of but aren't anymore?
+What's a small win from this week you're happy about?
+What's the last thing you did for the first time?
+What's a memory with a grandparent or older relative you treasure?
+What's something about yourself that surprised you as you got older?
+What's a goal you've quietly been chasing?
+What's the most important thing someone taught you?
+What's a moment you'll never forget from this year?
+What's something you do that makes you feel most like yourself?
+What's a change you've made that you're proud of?
+What's the last thing that made you feel really proud?
+What's a habit from your childhood you still have?
+What's a question you've never been asked but wish someone would ask you?
+What's something you used to dislike about yourself but have made peace with?
+What's a moment you felt genuinely surprised by your own courage?
+What's your idea of a perfect day, from morning to night?
+What's something you're looking forward to in the next five years?
+What's a piece of yourself you see in a family member?
+What's the last thing you learned about yourself?
+What's a memory that still feels like yesterday?
+What's something you've changed your mind about recently?
+What's a value you hold that guides most of your decisions?
+What's the most meaningful gift you've ever given someone?
+What's a version of yourself from the past you'd like to thank?
+What's something you do purely because it makes you happy, with no other reason?
+What's a memory you associate with a particular smell or song?
+What's something you've forgiven yourself for?
+What's a dream you had that you actually chased?
+What's the last time you felt truly free?
+What's a small thing people do that instantly makes your day better?
+What's something you're proud of accomplishing on your own?
+What's a moment you felt like you were exactly where you needed to be?
+What's something you're still figuring out about yourself?
+What's a piece of advice you keep coming back to?
+What's something you hope people remember about you?
+What's the most adventurous thing you've ever done?
+What's a memory that shaped who you are today?
+What's something you've learned from a mistake you made?
+What's the last time you laughed until it hurt?
+What's a comfort zone you're trying to step out of?
+What's something you daydream about often?
+What's a moment you felt truly understood by someone?
+What's the best version of yourself you can imagine becoming?
+What's something you're proud of that took years to build?
+What's a memory you'd relive if you could?
+What's something you hope never changes about you?
+What's a question about your own future you think about a lot?
+What's the last thing you did that scared you a little?
+What's a moment you felt most like yourself this year?
