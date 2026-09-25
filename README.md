@@ -4,9 +4,10 @@ A Telegram bot that periodically picks a random member of a group, asks
 them a personal question, and builds up a private question-and-answer
 history for each user.
 
-> **Status:** work in progress, built in stages. Currently implemented:
-> member tracking and `/help`. Scheduled questions, answer collection, and
-> the history commands are coming in later stages.
+> **Status:** work in progress. Member tracking, scheduled + on-demand
+> questions, answer collection, and the history commands (`/myanswers`,
+> `/answers`, `/deletemyanswers`) are all implemented. Deployment docs are
+> coming in a later stage.
 
 ## 1. Install dependencies
 
@@ -60,3 +61,34 @@ first and move to a VPS later.
 Add the bot to your Telegram group as a member. Once privacy mode is off
 (step 2), it will start tracking members as they send messages or
 join/leave. Try `/help` in the group to confirm it's running.
+
+## 6. (Optional) Import a group's existing member list
+
+The Bot API has no way to list a group's full membership — the bot only
+learns about people as they send messages or join *after* it's added. If
+you want everyone included right away (not just people who happen to post),
+`scripts/import_members.py` can seed the database using your own Telegram
+account instead of the bot:
+
+1. Get an `api_id` and `api_hash` from <https://my.telegram.org> (log in
+   with your own phone number, "API development tools") and set
+   `TELEGRAM_API_ID` / `TELEGRAM_API_HASH` in `.env`.
+2. Run it with no argument to list the groups your account is in:
+   ```bash
+   python -m scripts.import_members
+   ```
+3. Run it again with the group's `@username` or the id printed above:
+   ```bash
+   python -m scripts.import_members @mygroup
+   ```
+
+The first run asks you to log in with your phone number (a login code,
+plus your 2FA password if you have one). This creates a local
+`member_import.session` file so you don't have to log in again — treat
+that file like a password (it's already excluded from git via
+`.gitignore`); anyone with it can act as your Telegram account until you
+revoke the session from Telegram's Settings → Devices.
+
+This only needs to be run once per group (or again later if a lot of new
+people join without posting) — it's a separate one-off script, not part
+of the bot's normal operation.
