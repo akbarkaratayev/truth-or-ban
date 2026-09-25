@@ -26,7 +26,7 @@ HELP_TEXT = (
     "/myanswers — see your own saved questions and answers\n"
     "/deletemyanswers — delete all of your saved answers\n"
     "/ask — (admins only) ask a question right now\n"
-    "/answers @user — (admins only) see someone else's history\n"
+    "/answers @user (or reply to their message) — (admins only) see someone else's history\n"
     "/help — show this message"
 )
 
@@ -95,22 +95,36 @@ async def cmd_answers(message: Message, bot: Bot, db: Database, bot_username: st
         return
 
     args = (message.text or "").split(maxsplit=1)
-    if len(args) < 2 or not args[1].strip().startswith("@"):
-        await message.reply("Usage: /answers @username")
+    username_arg = None
+    if len(args) > 1 and args[1].strip().startswith("@"):
+        username_arg = args[1].strip().lstrip("@")
+
+    replied_user = message.reply_to_message.from_user if message.reply_to_message else None
+
+    if username_arg:
+        target = await db.find_member_by_username(message.chat.id, username_arg)
+        if target is None:
+            await message.reply(f"I don't know anyone named @{username_arg} in this group.")
+            return
+        target_id = target["user_id"]
+        name = display_name(
+            target["user_id"], target["first_name"], target["last_name"], target["username"]
+        )
+    elif replied_user is not None and not replied_user.is_bot:
+        target_id = replied_user.id
+        name = display_name(
+            replied_user.id, replied_user.first_name, replied_user.last_name, replied_user.username
+        )
+    else:
+        await message.reply(
+            "Usage: /answers @username, or reply to one of their messages with "
+            "/answers — handy for members who don't have a username."
+        )
         return
 
-    username = args[1].strip().lstrip("@")
-    target = await db.find_member_by_username(message.chat.id, username)
-    if target is None:
-        await message.reply(f"I don't know anyone named @{username} in this group.")
-        return
-
-    name = display_name(
-        target["user_id"], target["first_name"], target["last_name"], target["username"]
-    )
-    entries = await db.get_user_history(target["user_id"])
+    entries = await db.get_user_history(target_id)
     chunks = format_history(entries) or [f"{name} hasn't answered any questions yet."]
-    chunks[0] = f"History for {mention_html(target['user_id'], name)}:\n\n" + chunks[0]
+    chunks[0] = f"History for {mention_html(target_id, name)}:\n\n" + chunks[0]
 
     requester = message.from_user
     try:
