@@ -94,6 +94,20 @@ class Database:
             rows = await cursor.fetchall()
             return [dict(row) for row in rows]
 
+    async def find_member_by_username(self, chat_id: int, username: str) -> dict | None:
+        async with aiosqlite.connect(self._path) as db:
+            db.row_factory = aiosqlite.Row
+            cursor = await db.execute(
+                """
+                SELECT user_id, username, first_name, last_name
+                FROM members
+                WHERE chat_id = ? AND username = ? COLLATE NOCASE
+                """,
+                (chat_id, username),
+            )
+            row = await cursor.fetchone()
+            return dict(row) if row else None
+
     async def log_question(
         self,
         chat_id: int,

@@ -9,6 +9,7 @@ from bot.config import Config
 from bot.database import Database
 from bot.history import format_history
 from bot.questions import load_questions
+from bot.utils import display_name, mention_html
 
 router = Router(name="commands")
 
@@ -79,4 +80,46 @@ async def cmd_myanswers(message: Message, bot: Bot, db: Database, bot_username: 
         await message.reply(
             "I can't message you privately yet — start a chat with me first: "
             f"https://t.me/{bot_username}, then run /myanswers again."
+        )
+
+
+@router.message(Command("answers"))
+async def cmd_answers(message: Message, bot: Bot, db: Database, bot_username: str) -> None:
+    if message.chat.type not in GROUP_TYPES:
+        await message.reply("This command only works inside a group.")
+        return
+
+    admin = await bot.get_chat_member(message.chat.id, message.from_user.id)
+    if admin.status not in ADMIN_STATUSES:
+        await message.reply("Only group admins can use /answers.")
+        return
+
+    args = (message.text or "").split(maxsplit=1)
+    if len(args) < 2 or not args[1].strip().startswith("@"):
+        await message.reply("Usage: /answers @username")
+        return
+
+    username = args[1].strip().lstrip("@")
+    target = await db.find_member_by_username(message.chat.id, username)
+    if target is None:
+        await message.reply(f"I don't know anyone named @{username} in this group.")
+        return
+
+    name = display_name(
+        target["user_id"], target["first_name"], target["last_name"], target["username"]
+    )
+    entries = await db.get_user_history(target["user_id"])
+    chunks = format_history(entries) or [f"{name} hasn't answered any questions yet."]
+    chunks[0] = f"History for {mention_html(target['user_id'], name)}:\n\n" + chunks[0]
+
+    requester = message.from_user
+    try:
+        for chunk in chunks:
+            await bot.send_message(requester.id, chunk)
+        if message.chat.id != requester.id:
+            await message.reply(f"I've sent {name}'s answers to you in a private message 📬")
+    except TelegramForbiddenError:
+        await message.reply(
+            "I can't message you privately yet — start a chat with me first: "
+            f"https://t.me/{bot_username}, then run /answers again."
         )
