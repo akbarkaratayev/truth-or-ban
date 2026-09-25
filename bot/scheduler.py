@@ -10,8 +10,7 @@ from bot.questions import load_questions
 
 logger = logging.getLogger(__name__)
 
-MIN_CHECK_INTERVAL_SECONDS = 15
-MAX_CHECK_INTERVAL_SECONDS = 300
+CHECK_INTERVAL_SECONDS = 300
 
 
 async def run_scheduler(
@@ -21,22 +20,14 @@ async def run_scheduler(
     `interval_hours`, checking periodically rather than sleeping for the
     full interval so a freshly active chat doesn't have to wait a full
     cycle for its first check.
-
-    How often it checks scales with the configured interval (capped between
-    15s and 5min), so a short interval used for testing is actually
-    respected instead of being rounded up to a fixed 5-minute granularity.
     """
     interval = timedelta(hours=interval_hours)
-    check_interval = min(
-        MAX_CHECK_INTERVAL_SECONDS,
-        max(MIN_CHECK_INTERVAL_SECONDS, interval.total_seconds() / 5),
-    )
     while True:
         try:
             await _tick(bot, db, questions_file, interval)
         except Exception:
             logger.exception("Scheduled question tick failed")
-        await asyncio.sleep(check_interval)
+        await asyncio.sleep(CHECK_INTERVAL_SECONDS)
 
 
 async def _tick(bot: Bot, db: Database, questions_file: str, interval: timedelta) -> None:
