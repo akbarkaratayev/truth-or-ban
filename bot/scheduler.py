@@ -3,6 +3,7 @@ import logging
 from datetime import datetime, timedelta, timezone
 
 from aiogram import Bot
+from aiogram.exceptions import TelegramBadRequest, TelegramForbiddenError
 
 from bot.asking import ask_question
 from bot.database import Database
@@ -39,6 +40,16 @@ async def _tick(bot: Bot, db: Database, questions_file: str, interval: timedelta
         if last_asked_at is not None and now - last_asked_at < interval:
             continue
 
-        result = await ask_question(bot, db, chat_id, questions)
+        try:
+            result = await ask_question(bot, db, chat_id, questions)
+        except (TelegramBadRequest, TelegramForbiddenError):
+            logger.warning(
+                "Chat %s is no longer reachable (bot not in it, or it was "
+                "deleted) - marking inactive.",
+                chat_id,
+            )
+            await db.mark_chat_inactive(chat_id)
+            continue
+
         if result:
             logger.info("Skipped scheduled question for chat %s: %s", chat_id, result)
