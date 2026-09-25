@@ -236,9 +236,14 @@ class Database:
             return [dict(row) for row in rows]
 
     async def delete_user_history(self, user_id: int) -> int:
+        """Only deletes answered entries, matching get_user_history's
+        definition of "answers" - an unanswered/pending question isn't an
+        answer yet, so it's left alone rather than silently wiped too.
+        """
         async with aiosqlite.connect(self._path) as db:
             cursor = await db.execute(
-                "DELETE FROM questions_log WHERE user_id = ?", (user_id,)
+                "DELETE FROM questions_log WHERE user_id = ? AND answer IS NOT NULL",
+                (user_id,),
             )
             await db.commit()
             return cursor.rowcount
