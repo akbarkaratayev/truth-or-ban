@@ -8,3 +8,107 @@ What's the best piece of advice you've ever received?
 What's a place you'd love to visit and why?
 What's your go-to comfort food?
 What's a habit you're trying to build or break?
+What's the best thing you ate this week?
+If you could have dinner with any famous person from history, who would it be?
+What's a hobby you had as a kid that you'd like to try again?
+What's the most interesting job you can imagine doing?
+Would you rather live in a big city or a quiet village?
+What's a song you never get tired of?
+If you could live in any country for one year, where would you go?
+What's the best gift you've ever received?
+Are you a morning person or a night owl?
+What's a food you hated as a kid but love now?
+If you had a free day with no plans, how would you spend it?
+What's the most interesting place you've ever visited?
+What's a movie you can watch again and again?
+If you could have any superpower, what would you choose?
+What's something you learned recently that surprised you?
+Tea or coffee, and how do you take it?
+What did you want to be when you were a child?
+What's a TV series you'd recommend to everyone here?
+If you could instantly speak one new language fluently, which would it be?
+What's your favorite season and why?
+What's the best cheap purchase you've ever made?
+If you could time travel, would you go to the past or the future?
+What's a small daily habit that makes your life better?
+Which fictional world would you like to live in?
+What's the funniest thing that happened to you recently?
+What's your favorite way to relax after a long day?
+If you opened a café, what would you call it?
+What's a sport you enjoy watching or playing?
+Beach holiday or mountain holiday?
+What's a YouTube channel or podcast you've been enjoying lately?
+What's one thing on your bucket list?
+If animals could talk, which one would be the most interesting to chat with?
+What's the most unusual food you've ever tried?
+What's your favorite holiday or celebration of the year?
+What's a game (board, video, or mobile) you love?
+If you could invent something, what would it be?
+What's the nicest compliment you've ever received?
+What's a dish you love to cook, or wish you could cook?
+If you won a free trip tomorrow, where would you go?
+What's a word or phrase you use too often?
+What's a talent you have that people might not expect?
+What's the last thing that made you laugh out loud?
+Would you rather have a pause button or a rewind button for your life?
+What's your favorite city you've been to?
+What's a place in your city you think everyone should visit?
+If you had to eat one meal every day for a month, what would it be?
+What's the best book you've read in the last year?
+What's a trend you just don't understand?
+What does your perfect weekend breakfast look like?
+If you could be famous for one thing, what would it be?
+What's something you're looking forward to this month?
+What's the most useful thing you learned in school?
+What's your favorite smell?
+If you could ask an expert any question, what would you ask?
+What's a skill you think everyone should learn?
+Cats, dogs, or neither?
+What was your favorite cartoon as a kid?
+What would your dream house have that normal houses don't?
+What's a small luxury you love treating yourself to?
+If you could swap lives with a fictional character for a day, who would it be?
+What's the most beautiful view you've ever seen?
+What's a goal you have for the next year?
+What's your favorite sound?
+If you could master one musical instrument, which would you choose?
+What's something that always puts you in a good mood?
+What's your favorite type of weather?
+Would you rather explore space or the deep ocean?
+What's a movie or show you think is overrated?
+What advice would you give to your younger self?
+What's the first thing you do in the morning?
+If you had a robot assistant, what would you make it do first?
+What's a snack you can't resist?
+What's one invention you couldn't live without?
+If you could learn from any teacher in the world, who would it be?
+What's a fun fact you know that most people don't?
+What was your favorite game to play as a child?
+If you could redesign your city, what's the first thing you'd change?
+What's the longest trip you've ever taken?
+What's the best concert or live event you've ever been to?
+If you had your own TV show, what would it be about?
+What's a hidden gem restaurant or café you'd recommend?
+If you could only keep three apps on your phone, which would they be?
+What kind of music do you like to study or work to?
+What's the strangest dream you can remember?
+If you could have any animal as a pet, what would it be?
+What's a tradition from your country you'd like foreigners to know about?
+Would you rather read the book or watch the movie?
+What's the best meal you've ever had at a restaurant?
+If you could talk to your future self for five minutes, what would you ask?
+What's a word in another language that you really like?
+What's a small act of kindness you've seen recently?
+What's your favorite thing about the place you live?
+If you could make one rule everyone in the world had to follow, what would it be?
+What's a job you would never want to do?
+What's something you collect or used to collect?
+If you wrote a book, what would it be about?
+What's the last thing you learned how to do from a video?
+What's your favorite dessert?
+What's the most memorable birthday you've had?
+<<<<<<< HEAD
+What's a question you wish people asked you more often?
+=======
+What's a question you wish people asked you more often?
+>>>>>>> 26913ec8af96c6dd0f77ccdcea9108fdf6bd30ca
