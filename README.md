@@ -4,10 +4,10 @@ A Telegram bot that periodically picks a random member of a group, asks
 them a personal question, and builds up a private question-and-answer
 history for each user.
 
-> **Status:** work in progress. Member tracking, scheduled + on-demand
-> questions, answer collection, and the history commands (`/myanswers`,
-> `/answers`, `/deletemyanswers`) are all implemented. Deployment docs are
-> coming in a later stage.
+> **Status:** all core features are implemented — member tracking,
+> scheduled + on-demand questions, answer collection, the history
+> commands (`/myanswers`, `/answers`, `/deletemyanswers`), and VPS
+> deployment via `systemd`.
 
 ## 1. Install dependencies
 
@@ -92,3 +92,77 @@ revoke the session from Telegram's Settings → Devices.
 This only needs to be run once per group (or again later if a lot of new
 people join without posting) — it's a separate one-off script, not part
 of the bot's normal operation.
+
+## 7. Deploy to a VPS (run it 24/7)
+
+The bot uses long polling, so deployment just means getting the code
+running continuously on a server — no public URL, domain, or webhook
+setup required.
+
+### 7.1. Get the code and dependencies onto the VPS
+
+SSH into your VPS, then:
+
+```bash
+git clone <your-repo-url> truth-or-ban
+cd truth-or-ban
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+nano .env   # fill in BOT_TOKEN and the rest, same as the local setup
+```
+
+### 7.2. Bring over your existing database (optional)
+
+If you've already been running the bot locally and want to keep its
+data (members, questions asked, answers), stop the local bot first,
+then copy the database file over — it's a single file, no export/import
+needed:
+
+```bash
+scp bot.db youruser@your-vps-ip:/home/youruser/truth-or-ban/bot.db
+```
+
+Don't run the bot locally and on the VPS at the same time against the
+same `BOT_TOKEN` — two pollers racing for the same updates causes
+unpredictable behavior. Once the VPS copy is confirmed working, stop
+using the local one.
+
+### 7.3. Install it as a systemd service
+
+This repo includes a template unit file at `deploy/truth-or-ban.service`.
+Copy it and edit the placeholders (`youruser` and the project path) to
+match your VPS:
+
+```bash
+sudo cp deploy/truth-or-ban.service /etc/systemd/system/truth-or-ban.service
+sudo nano /etc/systemd/system/truth-or-ban.service   # fix User/WorkingDirectory/paths
+sudo systemctl daemon-reload
+sudo systemctl enable truth-or-ban    # start automatically on boot
+sudo systemctl start truth-or-ban
+```
+
+### 7.4. Manage and monitor it
+
+```bash
+sudo systemctl status truth-or-ban    # is it running?
+sudo systemctl restart truth-or-ban   # after pulling code updates
+sudo systemctl stop truth-or-ban
+journalctl -u truth-or-ban -f         # follow logs live
+journalctl -u truth-or-ban -n 100     # last 100 log lines
+```
+
+Since `Restart=on-failure` is set, `systemd` will automatically restart
+the bot if it ever crashes, and it'll start on its own if the VPS
+reboots.
+
+### 7.5. Updating after a code change
+
+```bash
+cd /home/youruser/truth-or-ban
+git pull
+source .venv/bin/activate
+pip install -r requirements.txt   # only needed if dependencies changed
+sudo systemctl restart truth-or-ban
+```

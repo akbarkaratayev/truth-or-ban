@@ -1,0 +1,18 @@
+[Unit]
+Description=Truth or... Telegram Question Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Replace with the Linux user that owns the project directory.
+User=youruser
+# Replace with the absolute path to the cloned project on the VPS.
+WorkingDirectory=/home/youruser/truth-or-ban
+EnvironmentFile=/home/youruser/truth-or-ban/.env
+ExecStart=/home/youruser/truth-or-ban/.venv/bin/python -m bot.main
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,6 +1,6 @@
-aiogram==3.15.0
-aiosqlite==0.20.0
-python-dotenv==1.0.1
+aiogram>=3.15,<4
+aiosqlite>=0.20,<1
+python-dotenv>=1.0,<2
 
 # Only needed for scripts/import_members.py (one-off member list import)
-telethon==1.36.0
+telethon>=1.36,<2
